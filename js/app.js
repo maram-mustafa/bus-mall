@@ -3,10 +3,12 @@
 let leftImageElement = document.getElementById('left-image');
 let centerImageElement = document.getElementById('center-image');
 let rightImageElement = document.getElementById('right-image');
+let container = document.getElementById('sec-one');
+
+
 
 let counts = 0;
 let maxAttempts = 25;
-
 let leftIndex;
 let centerIndex;
 let rightIndex;
@@ -68,9 +70,7 @@ renderThreeImages();
 // console.log(product.allImages.time);
 
 
-leftImageElement.addEventListener('click', handleClicking);
-centerImageElement.addEventListener('click', handleClicking);
-rightImageElement.addEventListener('click', handleClicking);
+container.addEventListener('click', handleClicking);
 
 function handleClicking(event) {
     counts++;
@@ -85,13 +85,21 @@ function handleClicking(event) {
         renderThreeImages();
         // consolee.log(product.allImages);
     } else {
-        renderList()
-        leftImageElement.removeEventListener('click', handleCliching);
-        centerImageElement.removeEventListener('click', handleCliching);
-        rightImageElement.removeEventListener('click', handleCliching);
+        container.removeEventListener('click',handleClicking);
     }
 
 }
+
+let button = document.getElementById('btn');
+button.addEventListener('click',showingList);
+
+
+function showingList(){
+    renderList();
+    button.removeEventListener('click',showingList);
+}
+
+
 
 function renderList() {
     let ul = document.getElementById('ulList');
