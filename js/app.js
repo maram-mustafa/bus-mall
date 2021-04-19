@@ -69,7 +69,7 @@ function renderThreeImages() {
     preIteration[2]=rightIndex;
 
         console.log(preIteration);
-        
+
     leftImageElement.src = product.allImages[leftIndex].source;
     product.allImages[leftIndex].time++;
     centerImageElement.src = product.allImages[centerIndex].source;
@@ -99,21 +99,22 @@ function handleClicking(event) {
         renderThreeImages();
 
     } else {
-        renderList();
-        chart();
+        // renderList();
+        // chart();
         container.removeEventListener('click', handleClicking);
     }
 
 }
 
-// let button = document.getElementById('btn');
-// button.addEventListener('click',showingList);
+let button = document.getElementById('btn');
+button.addEventListener('click',showingList);
 
 
-// function showingList(){
-//     renderList();
-//     button.removeEventListener('click',showingList);
-// }
+function showingList(){
+    renderList();
+    chart();
+    button.removeEventListener('click',showingList);
+}
 
 
 let arrOfVotes = [];
