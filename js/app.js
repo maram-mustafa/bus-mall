@@ -12,9 +12,10 @@ let maxAttempts = 25;
 let leftIndex;
 let centerIndex;
 let rightIndex;
-
-
+let arrOfNames = [];
 product.allImages = [];
+
+let preIteration = [];
 
 function product(name, source) {
     this.name = name;
@@ -22,6 +23,8 @@ function product(name, source) {
     this.time = 0;
     this.votes = 0;
     product.allImages.push(this);
+    arrOfNames.push(this.name);
+
 }
 
 
@@ -48,16 +51,24 @@ new product('wine-glass', 'img/wine-glass.jpg');
 
 console.log(product.allImages);
 
+
 function renderThreeImages() {
     leftIndex = genrateRandomIndex();
     centerIndex = genrateRandomIndex();
     rightIndex = genrateRandomIndex();
 
-    while (leftIndex === centerIndex || leftIndex === rightIndex || centerIndex === rightIndex) {
+    while ( leftIndex === centerIndex || leftIndex === rightIndex || centerIndex === rightIndex|| preIteration.includes(leftIndex) || preIteration.includes(centerIndex) || preIteration.includes(rightIndex)) {
         leftIndex = genrateRandomIndex();
         centerIndex = genrateRandomIndex();
-    }
+        rightIndex = genrateRandomIndex();
 
+    } 
+    
+    preIteration[0]=leftIndex;
+    preIteration[1]=centerIndex;
+    preIteration[2]=rightIndex;
+
+        console.log(preIteration);
 
     leftImageElement.src = product.allImages[leftIndex].source;
     product.allImages[leftIndex].time++;
@@ -65,9 +76,12 @@ function renderThreeImages() {
     product.allImages[centerIndex].time++;
     rightImageElement.src = product.allImages[rightIndex].source;
     product.allImages[rightIndex].time++;
+
+   
 }
 renderThreeImages();
-// console.log(product.allImages.time);
+
+console.log(preIteration);
 
 
 container.addEventListener('click', handleClicking);
@@ -83,9 +97,11 @@ function handleClicking(event) {
             product.allImages[rightIndex].votes++;
         }
         renderThreeImages();
-        // consolee.log(product.allImages);
+
     } else {
-        container.removeEventListener('click',handleClicking);
+        // renderList();
+        // chart();
+        container.removeEventListener('click', handleClicking);
     }
 
 }
@@ -96,14 +112,18 @@ button.addEventListener('click',showingList);
 
 function showingList(){
     renderList();
+    chart();
     button.removeEventListener('click',showingList);
 }
 
 
-
+let arrOfVotes = [];
+let arrOfTime = [];
 function renderList() {
     let ul = document.getElementById('ulList');
     for (let i = 0; i < product.allImages.length; i++) {
+        arrOfVotes.push(product.allImages[i].votes);
+        arrOfTime.push(product.allImages[i].time);
         let li = document.createElement('li');
         ul.appendChild(li);
         li.textContent = `${product.allImages[i].name} shown ${product.allImages[i].time} it has ${product.allImages[i].votes} Votes `;
@@ -112,6 +132,36 @@ function renderList() {
 
 
 
-function genrateRandomIndex() {     // to genarete a random images
+function genrateRandomIndex() {
     return Math.floor(Math.random() * product.allImages.length);
+}
+
+function chart() {
+    let ctx = document.getElementById('myChart');
+    let myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: arrOfNames,
+            datasets: [{
+                label: '# of Votes',
+                data: arrOfVotes,
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                ],
+                borderWidth: 1
+            },
+            {
+                label: '# of shown images',
+                data: arrOfTime,
+                backgroundColor: [
+                    'rgba(54, 162, 235, 1)',
+
+                ],
+                borderWidth: 1
+
+
+            }]
+
+        },
+    });
 }
