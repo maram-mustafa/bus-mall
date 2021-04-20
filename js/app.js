@@ -25,6 +25,7 @@ function product(name, source) {
     product.allImages.push(this);
     arrOfNames.push(this.name);
 
+
 }
 
 
@@ -68,7 +69,7 @@ function renderThreeImages() {
     preIteration[1]=centerIndex;
     preIteration[2]=rightIndex;
 
-        console.log(preIteration);
+      //  console.log(preIteration);
 
     leftImageElement.src = product.allImages[leftIndex].source;
     product.allImages[leftIndex].time++;
@@ -81,7 +82,9 @@ function renderThreeImages() {
 }
 renderThreeImages();
 
-console.log(preIteration);
+
+
+//console.log(preIteration);
 
 
 container.addEventListener('click', handleClicking);
@@ -96,6 +99,7 @@ function handleClicking(event) {
         } else if (event.target.id === 'right-image') {
             product.allImages[rightIndex].votes++;
         }
+        saveToLocalSt();
         renderThreeImages();
 
     } else {
@@ -106,6 +110,33 @@ function handleClicking(event) {
 
 }
 
+
+
+function saveToLocalSt(){
+    console.log(product.allImages);
+    let prod = JSON.stringify(product.allImages);
+    localStorage.setItem('products', prod);
+
+}
+
+function getFromLocalSt(){
+
+    let data =localStorage.getItem('products');
+    console.log(data);
+
+    let prod  = JSON.parse(data);
+    console.log(prod);
+
+    if(prod !== null){
+    product.allImages= prod;
+    showingList();
+
+    }
+}
+
+
+
+
 let button = document.getElementById('btn');
 button.addEventListener('click',showingList);
 
@@ -113,6 +144,7 @@ button.addEventListener('click',showingList);
 function showingList(){
     renderList();
     chart();
+
     button.removeEventListener('click',showingList);
 }
 
@@ -165,4 +197,6 @@ function chart() {
         },
     });
 }
-//
+
+
+getFromLocalSt();
